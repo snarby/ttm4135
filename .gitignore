@@ -1,0 +1,27 @@
+﻿# Ekorn
+*.aux
+*.log
+*.lof
+*.lot
+*.toc
+*.out
+*.class
+*.synctex.gz
+*.synctex.gz(busy)
+*.bbl
+*.glo
+*.acn
+*.ist
+*.blg
+*.pdf
+*.swp
+*.coverage
+*.pyc
+*.pyo
+*htmlcov/
+*__pycache__/
+/report/tmp
+/report/.tmp
+/src/indexdir/
+/src/output/
+/data/nlh/T/*.html

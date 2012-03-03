@@ -1,0 +1,137 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{textcomp} % Euro symbols etc
+\usepackage{graphicx} % support graphics
+\usepackage{hyperref} % links in the document
+\usepackage{float} % position of figures
+\usepackage{paralist} % inline lists
+\usepackage{verbatim} % multi-line comments
+\usepackage{booktabs} % Professional tables
+\usepackage{tabularx} % Simple column stretching
+\usepackage{multirow} % Row spanning
+\usepackage{wrapfig} % Wrap text around figures
+\usepackage{caption} % Hide some tables from list of tables
+\usepackage{array}
+\usepackage{color}
+\usepackage[Glenn]{fncychap}
+
+\setcounter{tocdepth}{1} % Depth of table of contents
+
+% Configure links in pdfs
+\hypersetup{
+    bookmarksopen=false, % Hide bookmarks menu
+    colorlinks=true, % Don't wrap links in colored boxes
+%    pdfborder={0 0 0} % Remove ugly boxes
+}
+
+
+%============
+% Top matter
+%============
+\title{Group project}
+\author{Hans Kristian Flaatten, Terje Snarby, Hamed Inanlou }
+\date{\today}
+
+\begin{document}
+
+
+%============
+% Title page
+%============
+\begin{titlepage}
+\begin{center}
+% Upper part
+\includegraphics[width=0.45\textwidth]{./img/NTNU-logo.png}\\[5cm]
+\textsc{\large Department of Telematics}\\[0.2cm]
+\textsc{\Large TTM4135 - Information Security}\\[0.5cm]
+
+% Title
+\rule{\linewidth}{0.2mm} \\[0.4cm]
+{ \LARGE \bfseries Project Report Group One}\\[0.2cm]
+\rule{\linewidth}{0.2mm} \\[1.5cm]
+
+% Author etc
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Hans Kristian \textsc{Flaatten}\\
+Terje \textsc{Snarby}\\
+Hamed \textsc{Inanlou}
+\end{flushleft}
+\end{minipage}
+
+% Bottom of the page
+\vfill
+{\large \today}
+\end{center}
+\end{titlepage}
+
+
+%==========
+% Abstract
+%==========
+\begin{abstract}
+This is ABSTRACT!
+\end{abstract}
+
+
+%===================
+% Table of Contents
+%===================
+\pagenumbering{roman}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents
+
+
+%=================
+% List of Figures
+%=================
+%\clearpage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{List of figures}
+%\listoffigures
+
+
+%================
+% List of Tables
+%================
+%\clearpage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{List of tables}
+%\listoftables
+
+
+%==========
+% Chapters
+%==========
+\clearpage
+\pagenumbering{arabic}
+\include{introduction}
+\include{method}
+\include{result}
+\include{discussion}
+\include{conclusion}
+
+%==============
+% Bibliography
+%==============
+%\clearpage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\bibliography{references}{}
+%\bibliographystyle{plain}
+
+
+%============
+% Appendices
+%============
+\appendix
+\include{commandline}
+
+
+\end{document}
+
