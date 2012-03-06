@@ -1,32 +1,27 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[a4paper, 12pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{textcomp} % Euro symbols etc
 \usepackage{graphicx} % support graphics
 \usepackage{hyperref} % links in the document
 \usepackage{float} % position of figures
 \usepackage{paralist} % inline lists
-\usepackage{verbatim} % multi-line comments
-\usepackage{booktabs} % Professional tables
-\usepackage{tabularx} % Simple column stretching
-\usepackage{multirow} % Row spanning
-\usepackage{wrapfig} % Wrap text around figures
-\usepackage{caption} % Hide some tables from list of tables
-\usepackage{array}
+\usepackage[normalsize, bf]{caption}
+\usepackage{listings} % Syntax colored code
 \usepackage{color}
-\usepackage[Glenn]{fncychap}
+\usepackage{textcomp}
+\usepackage{fixltx2e}
+\usepackage{fullpage} % smaller margins
+%\usepackage[top=4cm, bottom=4cm, left=3.3cm, right=3.3cm]{geometry}
+%\usepackage[left=3cm, right=3cm]{geometry}
 
-\setcounter{tocdepth}{1} % Depth of table of contents
+%\setcounter{tocdepth}{1} % Depth of table of contents
 
 % Configure links in pdfs
 \hypersetup{
     bookmarksopen=false, % Hide bookmarks menu
     colorlinks=true, % Don't wrap links in colored boxes
-%    pdfborder={0 0 0} % Remove ugly boxes
 }
-
-
 %============
 % Top matter
 %============
@@ -68,70 +63,39 @@ Hamed \textsc{Inanlou}
 \end{center}
 \end{titlepage}
 
-
-%%==========
-%% Abstract
-%%==========
 %\begin{abstract}
-%This is ABSTRACT!
+%Your abstract goes here
 %\end{abstract}
-%
 
-%===================
-% Table of Contents
-%===================
-\pagenumbering{roman}
-\clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{Contents}
-\tableofcontents
+%=====================
+\section{Introduction}
+%=====================
 
 
 %=================
-% List of Figures
+\section{Experimental Procedure}
 %=================
-%\clearpage
-%\phantomsection
-%\addcontentsline{toc}{chapter}{List of figures}
-%\listoffigures
 
 
-%================
-% List of Tables
-%================
-%\clearpage
-%\phantomsection
-%\addcontentsline{toc}{chapter}{List of tables}
-%\listoftables
+%==========================
+\section{Results}
+%==========================
+
+%==========================
+\section{Discussion}
+%==========================
+
+%===================
+\section{Conclusion}
+%===================
 
 
-%==========
-% Chapters
-%==========
-\clearpage
-\pagenumbering{arabic}
-\include{introduction}
-\include{method}
-\include{result}
-\include{discussion}
-\include{conclusion}
-
-%==============
-% Bibliography
-%==============
-%\clearpage
-%\phantomsection
-%\addcontentsline{toc}{chapter}{Bibliography}
-%\bibliography{references}{}
-%\bibliographystyle{plain}
-
-
-%============
-% Appendices
-%============
-\appendix
-\include{commandline}
-
+%===================
+\section{References}
+%===================
+\newpage
+\renewcommand*{\bibname}{\vspace{-20pt}\section{References}\vspace{-20pt}}
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
-
