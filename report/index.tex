@@ -70,10 +70,10 @@ Hamed \textsc{Inanlou}
 %=====================
 \section{Introduction}
 %=====================
-In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security \cite{Boney96}.
+In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security.
 
 \subsection{The Web}
-After the commercialization of the Internet in the late 1980s, there has been an incredible growth of users utilizing its services. By the end of 2011, over one third of the world’s population make use of the Internet. As it keeps expanding, the need for security becomes more and more apparent. As sensitive and confidential data are stored on web servers, the servers must be configured in a secure manner so that this information is not vulnerable of being exploited by the growing field of cyber criminals.
+After the commercialization of the Internet in the late 1980s, there has been an incredible growth of users utilizing its services. By the end of 2011, over one third of the World’s population make use of the Internet\cite{net}. As it keeps expanding, the need for security becomes more and more apparent. As sensitive and confidential data are stored on web servers, the servers must be configured in a secure manner so that this information is not vulnerable of being exploited by the growing field of cyber criminals.
 
 \subsection{Lab Assignment}
 The main goal for the assignment was to learn and understand how state-of-the-art web security can be accomplished using well known open source tools, and to question the strength- and weakness-points of the implementation.
@@ -90,17 +90,38 @@ To get hands-on experience, the assignment was to install and configure an Apach
 As a result of part I, we established the group as a CA in the certificate hierarchy of NTNU and generated a signed certificate for our Web server. \\ \\
 {\bf Q1. Comment on security related issues regarding the cryptographic algorithms used to
 generate and sign your groups web server certificate (key length, algorithm, etc.).}
+\\ \\
+For our server certificate we wanted to use the highest level of security possible, that OpenSSL and SSLv3/TLSv1 could provide. The following cipher suit was utilized for the creation of the certificate; DHE-RSA-AES256-SHA with a key pair of 4096 bits.
 
+RSA, AES and SHA-1 are the industry standard for secure SSL certificates. NIST recommends a minimum of 2048 bits\cite{nistkey} for asymmetric encryption [key-length], but with today's hardware it is no problem doubling the recommendation just to be on the absolute safe side.
 
+The default message digest algorithm in OpenSSL, MD5, offers a short hash value making it vulnerable to collisions. SHA-1 is by no means a perfect replacement but is considered the best algorithm TLSv1 capable of supporting. 
+%========
 \subsection{Part II: Access Control and Apache}
 %==========================
+When we were finished with part II, we had a fully functioning web server running the latest release of Apache - verified using digital signatures for the release. The server was configured to have two virtual hosts: one listening to port 8100, serving regular HTTP, and one listening to 8101, serving SSL.
+
+The SSL provides authentication between the server and client using X.509 certificates. This also enables the web server to do access control based on the certificates.
+\\ \\
 {\bf Q2. Explain what you have achieved through each of these verifications. What is the name
 of the person signing the Apache release?} \\
 \\
+The Apache releases are distributes through 3rd party servers - hence; proving the integrity of a release is alpha and omega. By by computing a checksum and comparing it against the distributed one we can prove integrity and that the release has not been modified in any way, either accidentally via a faulty transmission channel, or intentionally\cite{tre}. By verifying the signature for the person who have signed the release we can prove the authentication and non-repudiation of the release\cite{fire}.
+
+Apache version 2.2.22 have been signed by William A. Rowe, Jr., who is the release manager of the Apache Foundation. However, it is important to note that we can not be a 100\% certain of the validity of this signature. In order to be so we must arrange a face to face meeting \cite{fem} with someone already in the web of trust for this release. 
+\\ \\
 {\bf Q3. What are the access permissions to your web server’s configuration files, server certificate
 and the corresponding private key? Comment on possible attacks to your web server due to
 inappropriate file permissions.} \\
 \\
+For the maximum level of security, we have followed the principle of least privilege. As a result, access to critical server infrastructure have been locked down and placed outside directories otherwise publicly accessible over the Internet. 
+\begin{itemize}
+\item Configuration files : rwx r- - r- -
+\item Server certificate: r- - r- - r- -
+\item Server private key: r- -  - - -  - - - 
+\end{itemize}
+If the access permission were not set in an inappropriate way, an intruder could change configuration settings, circumventing critical server security functionally or even spoof the server in an man in the middle attack.
+\\ \\
 {\bf Q4. Web servers offering weak cryptography are subject to several attacks. What kind of
 attacks are feasible? How did you configure your server to prevent such attacks?}
 
@@ -112,20 +133,22 @@ such attacks.}
 
 \subsection{Part IV: Setting Up A Subversion Repository}
 %==========================
+Ending part IV, the web server had a working SVN repository. \\ \\
 {\bf Q6. Describe the security measures you have undertaken to secure your repository, and
-how did that affect the security of your Web Application (Better? Worse?). Elaborate on the
-possible further measures, that can prevent certain types of attacks you found possible in the
-setting you created. Can you discover any vulnerabilities in the other groups’ projects? If so,
-try to mount attacks on other groups!}
+how did that affect the security of your Web Application (Better? Worse?).}
 
 %==========================
 \section{Discussion}
 %==========================
-
+The lab included use of many tools and techniques to secure the web server. In this section we discuss the most critical ones in order to achieve the desired security.
+\subsection{Apache}
+Ideally the Apache web server should be run as a separate user. If the web sever is compromised the attacker will have access to everything inside our home folder, which includes the private key to our CA.
+\subsection{Certificates and SSL}
+\subsection{PHP and MySQL}
 %===================
 \section{Conclusion}
 %===================
-
+The Apache Web server was properly secured. This was accomplished by using digital certificates and server side scripts, given by the open source tools OpenSSL and PHP. 
 
 %===================
 \section{References}
@@ -136,11 +159,17 @@ try to mount attacks on other groups!}
 \bibliography{references}
 
 \begin{thebibliography}{10}
-\bibitem{Boney96} Boney, L., Tewfik, A.H., and Hamdy, K.N., ``Digital
-Watermarks for Audio Signals," \emph{Proceedings of the Third IEEE
-International Conference on Multimedia}, pp. 473-480, June 1996.
-\bibitem{MG} Goossens, M., Mittelbach, F., Samarin, \emph{A LaTeX
-Companion}, Addison-Wesley, Reading, MA, 1994.
+\bibitem{net} Internet usage statistics, December 31, 2011. \url{Http://www.internetworldstats.com/stats.htm}, March 11, 2012.
+\bibitem{nistkey} NIST Cryptographic key length recommendation. \url{Http://www.keylength.com/en/4/}, March 11, 2012.
+\bibitem{tre} The Apache Software Foundation, check integrity of a release: \url{http://www.apache.org/dev/release-signing\#check-integrity}, March 11, 2012.
+\bibitem{fire}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+\bibitem{fem}The web of trust, validating other keys on your public keyring: \url{http://www.gnupg.org/gph/en/manual.html#AEN335}, March 11, 2012.
+
+\bibitem{seks}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+
+\bibitem{syv}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+
+\bibitem{atte}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
 \end{thebibliography}
 
 \end{document}
