@@ -70,7 +70,7 @@ Hamed \textsc{Inanlou}
 %=====================
 \section{Introduction}
 %=====================
-In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security.
+In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security \cite{Boney96}.
 
 \subsection{The Web}
 After the commercialization of the Internet in the late 1980s, there has been an incredible growth of users utilizing its services. By the end of 2011, over one third of the world’s population make use of the Internet. As it keeps expanding, the need for security becomes more and more apparent. As sensitive and confidential data are stored on web servers, the servers must be configured in a secure manner so that this information is not vulnerable of being exploited by the growing field of cyber criminals.
@@ -84,6 +84,39 @@ To get hands-on experience, the assignment was to install and configure an Apach
 %==========================
 \section{Results}
 %==========================
+
+\subsection{Part I: Certificate Authority}
+%==========================
+As a result of part I, we established the group as a CA in the certificate hierarchy of NTNU and generated a signed certificate for our Web server. \\ \\
+{\bf Q1. Comment on security related issues regarding the cryptographic algorithms used to
+generate and sign your groups web server certificate (key length, algorithm, etc.).}
+
+
+\subsection{Part II: Access Control and Apache}
+%==========================
+{\bf Q2. Explain what you have achieved through each of these verifications. What is the name
+of the person signing the Apache release?} \\
+\\
+{\bf Q3. What are the access permissions to your web server’s configuration files, server certificate
+and the corresponding private key? Comment on possible attacks to your web server due to
+inappropriate file permissions.} \\
+\\
+{\bf Q4. Web servers offering weak cryptography are subject to several attacks. What kind of
+attacks are feasible? How did you configure your server to prevent such attacks?}
+
+\subsection{Part III: Writing PHP Application}
+%==========================
+{\bf Q5. What kind of malicious attacks is your web application (PHP) vulnerable to? Describe
+them briefly, and point out what countermeasures you have developed in your code to prevent
+such attacks.}
+
+\subsection{Part IV: Setting Up A Subversion Repository}
+%==========================
+{\bf Q6. Describe the security measures you have undertaken to secure your repository, and
+how did that affect the security of your Web Application (Better? Worse?). Elaborate on the
+possible further measures, that can prevent certain types of attacks you found possible in the
+setting you created. Can you discover any vulnerabilities in the other groups’ projects? If so,
+try to mount attacks on other groups!}
 
 %==========================
 \section{Discussion}
@@ -101,5 +134,13 @@ To get hands-on experience, the assignment was to install and configure an Apach
 \renewcommand*{\bibname}{\vspace{-20pt}\section{References}\vspace{-20pt}}
 \bibliographystyle{plain}
 \bibliography{references}
+
+\begin{thebibliography}{10}
+\bibitem{Boney96} Boney, L., Tewfik, A.H., and Hamdy, K.N., ``Digital
+Watermarks for Audio Signals," \emph{Proceedings of the Third IEEE
+International Conference on Multimedia}, pp. 473-480, June 1996.
+\bibitem{MG} Goossens, M., Mittelbach, F., Samarin, \emph{A LaTeX
+Companion}, Addison-Wesley, Reading, MA, 1994.
+\end{thebibliography}
 
 \end{document}
