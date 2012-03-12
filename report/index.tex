@@ -70,12 +70,10 @@ Hamed \textsc{Inanlou}
 %=====================
 \section{Introduction}
 %=====================
-In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security.
+In this paper we present and discuss results found in an Web Security Lab assignment, which is part of TTM4135 - Information Security. 
 
-\subsection{The Web}
 After the commercialization of the Internet in the late 1980s, there has been an incredible growth of users utilizing its services. By the end of 2011, over one third of the World’s population make use of the Internet\cite{net}. As it keeps expanding, the need for security becomes more and more apparent. As sensitive and confidential data are stored on web servers, the servers must be configured in a secure manner so that this information is not vulnerable of being exploited by the growing field of cyber criminals.
 
-\subsection{Lab Assignment}
 The main goal for the assignment was to learn and understand how state-of-the-art web security can be accomplished using well known open source tools, and to question the strength- and weakness-points of the implementation.
 
 To get hands-on experience, the assignment was to install and configure an Apache Web server and apply open source tools to fulfill today’s security procedures and standards. By doing this, well known services as HTML, PHP, MySQL and SVN will work as intended, in a secure fashion.
@@ -93,7 +91,7 @@ generate and sign your groups web server certificate (key length, algorithm, etc
 \\ \\
 For our server certificate we wanted to use the highest level of security possible, that OpenSSL and SSLv3/TLSv1 could provide. The following cipher suit was utilized for the creation of the certificate; DHE-RSA-AES256-SHA with a key pair of 4096 bits.
 
-RSA, AES and SHA-1 are the industry standard for secure SSL certificates. NIST recommends a minimum of 2048 bits\cite{nistkey} for asymmetric encryption [key-length], but with today's hardware it is no problem doubling the recommendation just to be on the absolute safe side.
+RSA, AES and SHA-1 are the industry standard for secure SSL certificates. NIST recommends a minimum of 2048 bits\cite{nistkey} for asymmetric encryption, but with today's hardware it is no problem doubling the recommendation just to be on the absolute safe side.
 
 The default message digest algorithm in OpenSSL, MD5, offers a short hash value making it vulnerable to collisions. SHA-1 is by no means a perfect replacement but is considered the best algorithm TLSv1 capable of supporting. 
 %========
@@ -105,16 +103,14 @@ The SSL provides authentication between the server and client using X.509 certif
 \\ \\
 {\bf Q2. Explain what you have achieved through each of these verifications. What is the name
 of the person signing the Apache release?} \\
-\\
-The Apache releases are distributes through 3rd party servers - hence; proving the integrity of a release is alpha and omega. By by computing a checksum and comparing it against the distributed one we can prove integrity and that the release has not been modified in any way, either accidentally via a faulty transmission channel, or intentionally\cite{tre}. By verifying the signature for the person who have signed the release we can prove the authentication and non-repudiation of the release\cite{fire}.
+By computing a checksum and comparing it against the distributed one we can prove integrity and that the release has not been modified in any way, either accidentally via a faulty transmission channel, or intentionally\cite{tre}. By verifying the signature for the person who have signed the release we can prove the authentication and non-repudiation of the release\cite{fire}.
 
-Apache version 2.2.22 have been signed by William A. Rowe, Jr., who is the release manager of the Apache Foundation. However, it is important to note that we can not be a 100\% certain of the validity of this signature. In order to be so we must arrange a face to face meeting \cite{fem} with someone already in the web of trust for this release. 
+Apache version 2.2.22 have been signed by William A. Rowe, Jr., who is the release manager of the Apache Foundation. However, it is important to note that we can not be a 100\% certain of the validity of this signature. In order to be so we must arrange a face to face meeting with someone already in the web of trust for this release\cite{fem}. 
 \\ \\
 {\bf Q3. What are the access permissions to your web server’s configuration files, server certificate
 and the corresponding private key? Comment on possible attacks to your web server due to
 inappropriate file permissions.} \\
-\\
-For the maximum level of security, we have followed the principle of least privilege. As a result, access to critical server infrastructure have been locked down and placed outside directories otherwise publicly accessible over the Internet. 
+For the maximum level of security, we have followed the principle of least privilege \cite{seks}. As a result, access to critical server infrastructure have been locked down and placed outside directories otherwise publicly accessible over the Internet. 
 \begin{itemize}
 \item Configuration files : rwx r- - r- -
 \item Server certificate: r- - r- - r- -
@@ -123,36 +119,68 @@ For the maximum level of security, we have followed the principle of least privi
 If the access permission were not set in an inappropriate way, an intruder could change configuration settings, circumventing critical server security functionally or even spoof the server in an man in the middle attack.
 \\ \\
 {\bf Q4. Web servers offering weak cryptography are subject to several attacks. What kind of
-attacks are feasible? How did you configure your server to prevent such attacks?}
+attacks are feasible? How did you configure your server to prevent such attacks?} \\
+Web servers using weak cryptography are subject to these, and other, attacks:
+\begin{itemize}
+\item Factorisation of RSA modulus. Since RSA relies solely on the difficulty of factorizing large prime numbers and that the public key always is known to the attacker you need a certain minimum key size to make sure that it is not easily factorized to get the private key. Researchers have already been able to solve factorization of a 768-bit RSA modulus \cite{tolv} and it’s only a matter of time until 1024-bit is is factorized.
+\item Brute force attack. Here the attacker tries every possible combination in the key space. This is very effectively prevented by using a large enough key as the difficulty of this type of attack increases exponentially. Increasing the key size by even one bit doubles the difficulty.
+\item Chosen-Ciphertext Attack (CCA) \cite{tretten}. This is an attack where the attacker is choosing a ciphertext to send to the server and obtains its decrypted plaintext under an unknown key. By repeatedly doing this the server leaks, a little by little, information which can be used by the attacker to recover it’s private key. The best solution is to switch to cipher that is proven secure from ciphertext attacks. RSA have solved this by hashing signed messages.
+\end{itemize}
 
 \subsection{Part III: Writing PHP Application}
 %==========================
+As a result of part III, the Web server supported sever scripts written in PHP. This was used to to achieve better security in means of access control to the the /admin directory as well as input validation. \\
+\\
 {\bf Q5. What kind of malicious attacks is your web application (PHP) vulnerable to? Describe
 them briefly, and point out what countermeasures you have developed in your code to prevent
 such attacks.}
+\\
+The number one risk in web applications is user supplied input \cite{ti}. No input from any user should blindly be trusted without proper sanitation first.
+\begin{itemize}
+\item To counter injection- and XSS-attacks we have applied PHP’s built in sanitation function, htmlentities() \cite{syv}, on all user supplied inputs to our application. This makes the input safe for both the database and users viewing the result of the input. We are also employing PHP’s improved MySQL capabilities with prepared statements binding inputs to their correct places in the query.
+\item Information Leakage mainly, but not limited to, displaying raw error messages directly to the user may reveal a lot of information to an attacker. Such as file and directory structure, database structure and more. Even though security by obscurity is no security at all preventing such leakages have proven highly effective in preventing blind sql attacks. 
+\item Weak users passwords, is the only attack we have no direct control over. This could have been solved by enforcing a password policy and checking the passwords before they are store in the database but due to timing constraints we did not have time to implement this. It is important to note that password policies are not foolproof but will make sure that password has a minimum security.
+\item Cross-Site Request Forgery Attacks (CSRF) are another type of unsolved problems in our application. A CSRF attack takes advantage of web applications that allows the attacker to predict details of a particular action. These request are legitimate requests made by the user, but unwillingly, either by submitting a form or clicking a link supplied by the attacker. This attack is easily prevented by applying form keys, a secret not known by the attacker in advanced and must be generated before any action is done and sent along with the action.
+\end{itemize}
 
 \subsection{Part IV: Setting Up A Subversion Repository}
 %==========================
 Ending part IV, the web server had a working SVN repository. \\ \\
 {\bf Q6. Describe the security measures you have undertaken to secure your repository, and
-how did that affect the security of your Web Application (Better? Worse?).}
+how did that affect the security of your Web Application (Better? Worse?).} \\
+\\
+Using Apache’s built-in basic authentication, the repository is only accessible to users that can provide a valid username and password. The repository also only accessible over HTTPS. This improves the overall security of the repository. Without it, the integrity of the repository is lost and anyone is able to commit changes.
+
+Apache applies a designed MD5 algorithm - iterating 1,000 times over the digested password combination with a 32-bit random unique for the server \cite{elleve} when it saves users passwords. This makes it exponentially harder to brute force the passwords if an attacker, against all odds, should get hold of them.
 
 %==========================
 \section{Discussion}
 %==========================
 The lab included use of many tools and techniques to secure the web server. In this section we discuss the most critical ones in order to achieve the desired security.
 \subsection{Apache}
-Ideally the Apache web server should be run as a separate user. If the web sever is compromised the attacker will have access to everything inside our home folder, which includes the private key to our CA.
+Ideally the Apache web server should be run as a separate user. If the web sever is compromised the attacker will have access to everything the user running Apache has access to, in our case will be the entire home folder for our group, which includes the private key to our CA.
+
+Even though we are in control of what is put on our server it is highly recommended \cite{fjorten} disabling the override of symbolic links through .httacces files to prevent accessing files and directories outside the current chroot jail for Apache.
+%============
 \subsection{Certificates and SSL}
+%============
+At the core of the security for our server is the usage of SSL certificates. The server acquire measures for access control and authentication as a result using the SSL protocol and the X.509 standard. The single most important measure to ensure that the security provided by these cryptography techniques, is to use a sufficient bit length when generating keys.
+%============
 \subsection{PHP and MySQL}
 %===================
+The use of PHP and MySQL enables convenient features for our server, such as persisting log-ins and signing up. On the other hand, these tools are subject to several attacks. 
+
+The MySQL user should have as little access rights to the database as the application(s) needs, dropping the database entirely is very rarely a feature needed by any web application, hence the MySQL user should not have such rights either. Ideally there should be two MySQL users, one with only read access and one with read write. This does not prevent MySQL injections but makes the developer aware when the application needs to write to the database and make additional steps to ensure that no malicious content gets in.
+
+We chose not to use PHP sessions for presisten authentication and went for cookies only. This was because there have been reported incidents where sessions can be accessed on shared hosting \cite{atte}. One an other not, by using the \$secure option in setcookie() the user’s browser will never send the cookie over HTTP effectively disabling many of the session hijacking attacks \cite{ni}. 
+
+Lastly, we chose to encrypt user passwords using state of the art hashing - SHA-256. We also generate a unique salt random SHA-1 salt for each user making brute forcing user passwords practical impossible. 
+
 \section{Conclusion}
 %===================
-The Apache Web server was properly secured. This was accomplished by using digital certificates and server side scripts, given by the open source tools OpenSSL and PHP. 
+The Apache Web server was properly secured. This was accomplished by using digital certificates and server side scripts, given by the open source tools OpenSSL and PHP. The server were included in the trust hierarchy of NTNU.
 
-%===================
-\section{References}
-%===================
+
 \newpage
 \renewcommand*{\bibname}{\vspace{-20pt}\section{References}\vspace{-20pt}}
 \bibliographystyle{plain}
@@ -160,16 +188,33 @@ The Apache Web server was properly secured. This was accomplished by using digit
 
 \begin{thebibliography}{10}
 \bibitem{net} Internet usage statistics, December 31, 2011. \url{Http://www.internetworldstats.com/stats.htm}, March 11, 2012.
+
 \bibitem{nistkey} NIST Cryptographic key length recommendation. \url{Http://www.keylength.com/en/4/}, March 11, 2012.
+
 \bibitem{tre} The Apache Software Foundation, check integrity of a release: \url{http://www.apache.org/dev/release-signing\#check-integrity}, March 11, 2012.
+
 \bibitem{fire}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+
 \bibitem{fem}The web of trust, validating other keys on your public keyring: \url{http://www.gnupg.org/gph/en/manual.html#AEN335}, March 11, 2012.
 
-\bibitem{seks}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+\bibitem{seks}Homeland Security, Least Privilege: \url{https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/principles/351-BSI.html}, March 11, 2012.
 
-\bibitem{syv}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+\bibitem{syv}PHP Manual, htmlentities: \url{http://www.php.net/manual/en/function.htmlentities.php}, March 11, 2012.
 
-\bibitem{atte}Apache HTTP Server Project, information about signing: \url{http://httpd.apache.org/dev/verification.html}, March 11, 2012.
+\bibitem{atte}PHP Security Guide,Shared Hosts: \url{http://phpsec.org/projects/guide/5.html}, March 11, 2012.
+
+\bibitem{ni}OWASP, Session hijacking attack: \url{https://www.owasp.org/index.php/Session_hijacking_attack}, March 11, 2012.
+
+\bibitem{ti}OWASP Top 10 - 2010 - Top Ten Most Critical Web Application Security Risks, March 11, 2012.
+
+\bibitem{elleve}Apache HTTP Server, Password Formats:  \url{http://httpd.apache.org/docs/2.2/misc/password_encryptions.html}, March 11, 2012.
+
+\bibitem{tolv}Factorization of a 768-bit RSA modulus: \url{http://eprint.iacr.org/2010/006.pdf}, March 11, 2012.
+
+\bibitem{tretten}Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard \url{http://www.springerlink.com/content/j5758n240017h867/fulltext.pdf}, March 11, 2012.
+
+\bibitem{fjorten}LinuxSecurity.com: \url{http://www.linuxsecurity.com/content/view/133913/171/}, March 11, 2012.
+
 \end{thebibliography}
 
 \end{document}
